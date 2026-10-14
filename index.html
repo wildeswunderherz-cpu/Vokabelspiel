@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#223f35">
+<title>Wunderwort · Dein Vokabelabenteuer</title>
+<link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body>
+<header><a class="brand" href="./">✦ Wunderwort</a><span class="tag">Kleine Wörter. Große Abenteuer.</span></header>
+<main>
+<section class="intro"><span class="eyebrow">DEIN TÄGLICHES VOKABELABENTEUER</span><h1>Lerne Wörter.<br>Wecke Wunder.</h1><p>Jedes neue Wort macht dich und dein Fantasietier ein bisschen stärker.</p></section>
+<div class="layout">
+<section class="card quiz" aria-labelledby="quiz-title">
+<div class="card-top"><span class="eyebrow">ENGLISCH → DEUTSCH</span><select id="level" aria-label="Schwierigkeitsgrad"><option value="easy">🌱 Einstieg</option><option value="medium">🌿 Entdecker</option></select></div>
+<div class="progress-label"><span id="round-label">Wort 1 von 10</span><span id="score-label">0 richtig</span></div><div class="progress"><div id="progress-bar"></div></div>
+<div id="question-area"><p class="question-caption">Was bedeutet dieses Wort?</p><h2 id="quiz-title"></h2><div id="answers" class="answers"></div></div>
+<p id="feedback" class="feedback" role="status" aria-live="polite">Wähle die passende Übersetzung.</p>
+<button id="next" class="primary" hidden>Nächstes Wort <span>→</span></button>
+</section>
+<aside class="card pet-card" aria-labelledby="pet-title"><div class="card-top"><span class="eyebrow">DEIN FANTASIETIER</span><span id="pet-level" class="badge">Level 1</span></div><div class="pet-scene"><span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span><div id="pet" class="pet" role="img" aria-label="Ein freundlicher grüner Fantasiedrache">🐲</div><div class="ground"></div></div><h2 id="pet-title">Lumi</h2><p id="pet-message">Ich bin bereit für unser Abenteuer!</p><div class="stats"><div><strong id="coins">0</strong><span>✦ Sterne</span></div><div><strong id="total">0</strong><span>Wörter gelernt</span></div></div><button id="feed" class="secondary">🍎 Lumi füttern <span>20 ✦</span></button><p id="feed-status" class="small" role="status">Sammle Sterne mit richtigen Antworten.</p></aside>
+</div>
+<section class="how"><div><span>01</span><p><strong>Ein Wort entdecken</strong>Wähle die richtige Übersetzung.</p></div><div><span>02</span><p><strong>Sterne sammeln</strong>Jede richtige Antwort bringt 10 Sterne.</p></div><div><span>03</span><p><strong>Zusammen wachsen</strong>Füttere Lumi und erreiche neue Level.</p></div></section>
+</main><footer><span>Mit Neugier wächst alles. ✧</span><button id="reset">Fortschritt zurücksetzen</button></footer>
+</body></html>
