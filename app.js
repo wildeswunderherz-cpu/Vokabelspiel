@@ -12,23 +12,61 @@ let customWords = [];
 function validWords(list) { return Array.isArray(list) && list.length <= 500 && list.every(pair => Array.isArray(pair) && pair.length === 2 && pair.every(word => typeof word === 'string' && word.trim().length > 0 && word.length <= 120)); }
 try { const saved = JSON.parse(localStorage.getItem(wordsKey)); if (validWords(saved)) customWords = saved.map(pair => pair.map(word => word.trim())); } catch {}
 let deck, index, score, answered, activeWords, editing = null;
+let currentQuestion = null;
+const normalizeAnswer = value => value.normalize('NFKC').trim().toLocaleLowerCase('de-DE').replace(/[.!?]+$/g,'').replace(/\s+/g,' ');
+function directionForQuestion(){const selected=$('direction').value;return selected==='mixed'?(Math.random()<0.5?'en-de':'de-en'):selected;}
+function expectedAnswers(value){return value.split(/\s*[,;]\s*/).map(normalizeAnswer).filter(Boolean);}
 function customReady() { return new Set(customWords.map(pair => pair[1])).size >= 2; }
 function shuffle(items) { const result=[...items]; for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]];}return result; }
 function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch{$('feed-status').textContent='Speichern ist hier nicht verfügbar. Dein Fortschritt bleibt für diese Sitzung.';} updatePet();}
 function updatePet(){ $('coins').textContent=state.coins;$('total').textContent=state.total;$('pet-level').textContent=`Level ${1+Math.floor(state.feeds/3)}`;$('feed').disabled=state.coins<20; }
 function start(){
  activeWords = ($('level').value === 'custom' ? customWords : vocabulary[$('level').value]).map(pair => [...pair]);
- index=0;score=0;answered=false;$('score-label').textContent='0 richtig';
- $('language-label').textContent=$('level').value==='custom'?'DEINE VOKABELN':'ENGLISCH → DEUTSCH';
+ index=0;score=0;answered=false;currentQuestion=null;$('score-label').textContent='0 richtig';
  if($('level').value==='custom' && !customReady()) {
-  deck=[];$('quiz-title').textContent='Deine Wörter warten auf dich';$('answers').replaceChildren();$('round-label').textContent='Noch keine Runde';$('progress-bar').style.width='0%';$('next').hidden=true;$('feedback').textContent='Trage unten mindestens zwei Vokabeln mit unterschiedlichen Übersetzungen ein.';return;
+  deck=[];$('quiz-title').textContent='Deine Wörter warten auf dich';$('answers').replaceChildren();$('write-form').hidden=true;$('round-label').textContent='Noch keine Runde';$('progress-bar').style.width='0%';$('next').hidden=true;$('feedback').textContent='Trage unten mindestens zwei Vokabeln mit unterschiedlichen Übersetzungen ein.';return;
  }
  deck=shuffle(activeWords).slice(0,10);render();
 }
-function render(){answered=false;$('next').hidden=true;$('round-label').textContent=`Wort ${index+1} von ${deck.length}`;$('score-label').textContent=`${score} richtig`;$('progress-bar').style.width=`${index/deck.length*100}%`;$('quiz-title').textContent=deck[index][0];$('feedback').textContent='Wähle die passende Übersetzung.';$('question-area').hidden=false;$('answers').replaceChildren();const right=deck[index][1];const choices=shuffle([right,...shuffle([...new Set(activeWords.map(v=>v[1]))].filter(v=>v!==right)).slice(0,3)]);choices.forEach((word,i)=>{const button=document.createElement('button');button.className='answer';const letter=document.createElement('b');letter.textContent=String.fromCharCode(65+i);const label=document.createElement('span');label.textContent=word;button.append(letter,label);button.addEventListener('click',()=>answer(word,button));$('answers').append(button);});}
-function answer(word,button){if(answered)return;answered=true;const right=deck[index][1];for(const option of $('answers').children){option.disabled=true;if(option.lastChild.textContent===right)option.classList.add('correct');}if(word===right){score++;state.coins+=10;state.total++;save();$('feedback').textContent='Richtig! +10 Sterne für dich und Lumi. ✦';$('pet-message').textContent='Ein neues Wort! Du machst das toll.';}else{button.classList.add('wrong');$('feedback').textContent=`Fast! „${deck[index][0]}“ bedeutet „${right}“. Merke es dir fürs nächste Mal.`;}$('score-label').textContent=`${score} richtig`;$('next').textContent=index===deck.length-1?'Runde abschließen →':'Nächstes Wort →';$('next').hidden=false;}
-$('next').addEventListener('click',()=>{if(index>=deck.length){start();return;}if(!answered)return;index++;if(index<deck.length){render();return;}$('progress-bar').style.width='100%';$('round-label').textContent='Runde abgeschlossen';$('quiz-title').textContent='Gut gemacht! ✨';$('answers').replaceChildren();$('feedback').textContent=`Du hast ${score} von ${deck.length} Wörtern richtig beantwortet und ${score*10} Sterne verdient. Bereit für eine neue Runde?`;$('next').textContent='Neue Runde starten →';});
+function render(){
+ answered=false;$('written-answer').disabled=false;$('write-form').querySelector('button').disabled=false;$('next').hidden=true;
+ $('round-label').textContent=`Wort ${index+1} von ${deck.length}`;
+ $('score-label').textContent=`${score} richtig`;$('progress-bar').style.width=`${index/deck.length*100}%`;
+ const direction=directionForQuestion(), pair=deck[index],reverse=direction==='de-en';
+ currentQuestion={prompt:pair[reverse?1:0],right:pair[reverse?0:1],direction};
+ $('language-label').textContent=reverse?'DEUTSCH → ENGLISCH':'ENGLISCH → DEUTSCH';
+ $('quiz-title').textContent=currentQuestion.prompt;
+ $('feedback').textContent=$('mode').value==='write'?'Schreibe deine Antwort und prüfe sie.':'Wähle die passende Übersetzung.';
+ $('question-area').hidden=false;$('answers').replaceChildren();
+ const writing=$('mode').value==='write';$('answers').hidden=writing;$('write-form').hidden=!writing;
+ if(writing){$('written-answer').value='';return;}
+ const answerIndex=reverse?0:1,right=currentQuestion.right;
+ const choices=shuffle([right,...shuffle([...new Set(activeWords.map(v=>v[answerIndex]))].filter(v=>v!==right)).slice(0,3)]);
+ choices.forEach((word,i)=>{const button=document.createElement('button');button.className='answer';const letter=document.createElement('b');letter.textContent=String.fromCharCode(65+i);const label=document.createElement('span');label.textContent=word;button.append(letter,label);button.addEventListener('click',()=>answer(word,button));$('answers').append(button);});
+}
+function finishAnswer(correct,provided,button){
+ if(answered)return;answered=true;
+ const right=currentQuestion.right;
+ if($('mode').value==='write'){$('written-answer').disabled=true;$('write-form').querySelector('button').disabled=true;}
+ else for(const option of $('answers').children){option.disabled=true;if(option.lastChild.textContent===right)option.classList.add('correct');}
+ if(correct){score++;state.coins+=10;state.total++;save();$('feedback').textContent='Richtig! +10 Sterne für dich und Lumi. ✦';$('pet-message').textContent='Ein neues Wort! Du machst das toll.';}
+ else{if(button)button.classList.add('wrong');$('feedback').textContent=`Fast! Die richtige Antwort lautet „${right}“. Du hast „${provided || '–'}“ eingegeben.`;}
+ $('score-label').textContent=`${score} richtig`;
+ $('next').textContent=index===deck.length-1?'Runde abschließen →':'Nächstes Wort →';$('next').hidden=false;
+}
+function answer(word,button){finishAnswer(word===currentQuestion.right,word,button);}
+$('write-form').addEventListener('submit',event=>{
+ event.preventDefault();if(answered||!currentQuestion)return;
+ const given=$('written-answer').value.trim();if(!given){$('feedback').textContent='Schreibe zuerst eine Antwort.';return;}
+ const correct=expectedAnswers(currentQuestion.right).includes(normalizeAnswer(given))||normalizeAnswer(given)===normalizeAnswer(currentQuestion.right);
+ finishAnswer(correct,given,null);
+});
+
+$('next').addEventListener('click',()=>{if(index>=deck.length){start();return;}if(!answered)return;index++;if(index<deck.length){render();return;}$('progress-bar').style.width='100%';$('round-label').textContent='Runde abgeschlossen';$('quiz-title').textContent='Gut gemacht! ✨';$('answers').replaceChildren();$('write-form').hidden=true;$('written-answer').disabled=false;$('write-form').querySelector('button').disabled=false;$('feedback').textContent=`Du hast ${score} von ${deck.length} Wörtern richtig beantwortet und ${score*10} Sterne verdient. Bereit für eine neue Runde?`;$('next').textContent='Neue Runde starten →';});
 $('level').addEventListener('change',start);
+$('direction').addEventListener('change',start);
+$('mode').addEventListener('change',start);
+$('next').addEventListener('click',()=>{$('written-answer').disabled=false;$('write-form').querySelector('button').disabled=false;});
 $('feed').addEventListener('click',()=>{if(state.coins<20)return;state.coins-=20;state.feeds++;save();$('pet-message').textContent='Mmmh, danke! Mit dir wachse ich über mich hinaus.';$('feed-status').textContent=state.feeds%3===0?'Neues Level! Lumi wird immer stärker. ✨':`Noch ${3-state.feeds%3} Leckerbissen bis zum nächsten Level.`;$('pet').classList.remove('celebrate');void $('pet').offsetWidth;$('pet').classList.add('celebrate');});
 $('reset').addEventListener('click',()=>{if(!confirm('Möchtest du alle Sterne und Lumis Fortschritt zurücksetzen?'))return;state={coins:0,total:0,feeds:0};save();$('pet-message').textContent='Ich bin bereit für unser Abenteuer!';$('feed-status').textContent='Sammle Sterne mit richtigen Antworten.';start();});
 function persistWords(message) {
