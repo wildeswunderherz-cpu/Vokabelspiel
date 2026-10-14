@@ -13,8 +13,9 @@
 <div class="layout">
 <section class="card quiz" aria-labelledby="quiz-title">
 <div class="card-top"><span class="eyebrow"><span id="language-label">ENGLISCH → DEUTSCH</span></span><select id="level" aria-label="Schwierigkeitsgrad"><option value="easy">🌱 Einstieg</option><option value="medium">🌿 Entdecker</option><option value="custom">📒 Meine Vokabeln</option></select></div>
+<div class="practice-settings"><label>Lernrichtung<select id="direction" aria-label="Lernrichtung"><option value="mixed">🎲 Gemischt</option><option value="en-de">🇬🇧 Englisch → Deutsch</option><option value="de-en">🇩🇪 Deutsch → Englisch</option></select></label><label>Übungsart<select id="mode" aria-label="Übungsart"><option value="choice">Antwort auswählen</option><option value="write">✏️ Antwort schreiben</option></select></label></div>
 <div class="progress-label"><span id="round-label">Wort 1 von 10</span><span id="score-label">0 richtig</span></div><div class="progress"><div id="progress-bar"></div></div>
-<div id="question-area"><p class="question-caption">Was bedeutet dieses Wort?</p><h2 id="quiz-title"></h2><div id="answers" class="answers"></div></div>
+<div id="question-area"><p class="question-caption">Was bedeutet dieses Wort?</p><h2 id="quiz-title"></h2><div id="answers" class="answers"></div><form id="write-form" class="write-form" hidden><label for="written-answer">Deine Übersetzung</label><input id="written-answer" type="text" maxlength="120" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Schreibe die Übersetzung …"><button class="primary" type="submit">Antwort prüfen ✓</button></form></div>
 <p id="feedback" class="feedback" role="status" aria-live="polite">Wähle die passende Übersetzung.</p>
 <button id="next" class="primary" hidden>Nächstes Wort <span>→</span></button>
 </section>
