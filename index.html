@@ -12,14 +12,36 @@
 <section class="intro"><span class="eyebrow">DEIN TÄGLICHES VOKABELABENTEUER</span><h1>Lerne Wörter.<br>Wecke Wunder.</h1><p>Jedes neue Wort macht dich und dein Fantasietier ein bisschen stärker.</p></section>
 <div class="layout">
 <section class="card quiz" aria-labelledby="quiz-title">
-<div class="card-top"><span class="eyebrow">ENGLISCH → DEUTSCH</span><select id="level" aria-label="Schwierigkeitsgrad"><option value="easy">🌱 Einstieg</option><option value="medium">🌿 Entdecker</option></select></div>
+<div class="card-top"><span class="eyebrow"><span id="language-label">ENGLISCH → DEUTSCH</span></span><select id="level" aria-label="Schwierigkeitsgrad"><option value="easy">🌱 Einstieg</option><option value="medium">🌿 Entdecker</option><option value="custom">📒 Meine Vokabeln</option></select></div>
 <div class="progress-label"><span id="round-label">Wort 1 von 10</span><span id="score-label">0 richtig</span></div><div class="progress"><div id="progress-bar"></div></div>
 <div id="question-area"><p class="question-caption">Was bedeutet dieses Wort?</p><h2 id="quiz-title"></h2><div id="answers" class="answers"></div></div>
 <p id="feedback" class="feedback" role="status" aria-live="polite">Wähle die passende Übersetzung.</p>
 <button id="next" class="primary" hidden>Nächstes Wort <span>→</span></button>
 </section>
-<aside class="card pet-card" aria-labelledby="pet-title"><div class="card-top"><span class="eyebrow">DEIN FANTASIETIER</span><span id="pet-level" class="badge">Level 1</span></div><div class="pet-scene"><span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span><div id="pet" class="pet" role="img" aria-label="Ein freundlicher grüner Fantasiedrache">🐲</div><div class="ground"></div></div><h2 id="pet-title">Lumi</h2><p id="pet-message">Ich bin bereit für unser Abenteuer!</p><div class="stats"><div><strong id="coins">0</strong><span>✦ Sterne</span></div><div><strong id="total">0</strong><span>Wörter gelernt</span></div></div><button id="feed" class="secondary">🍎 Lumi füttern <span>20 ✦</span></button><p id="feed-status" class="small" role="status">Sammle Sterne mit richtigen Antworten.</p></aside>
+<aside class="card pet-card" aria-labelledby="pet-title"><div class="card-top"><span class="eyebrow">DEIN FANTASIETIER</span><span id="pet-level" class="badge">Level 1</span></div><div class="pet-scene"><span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span><div id="pet" class="pet" role="img" aria-label="Lumi, ein flauschiger Babyhase mit großen glänzenden Augen"><svg viewBox="0 0 220 240" aria-hidden="true">
+<defs><radialGradient id="fur"><stop stop-color="#fffef9"/><stop offset="1" stop-color="#e8ddce"/></radialGradient></defs>
+<ellipse cx="110" cy="191" rx="48" ry="39" fill="url(#fur)"/><circle cx="160" cy="192" r="17" fill="#fffdf7"/>
+<ellipse cx="72" cy="68" rx="24" ry="62" transform="rotate(-15 72 68)" fill="url(#fur)"/><ellipse cx="72" cy="64" rx="12" ry="43" transform="rotate(-15 72 64)" fill="#f3bdc5"/>
+<ellipse cx="146" cy="67" rx="24" ry="62" transform="rotate(15 146 67)" fill="url(#fur)"/><ellipse cx="146" cy="63" rx="12" ry="43" transform="rotate(15 146 63)" fill="#f3bdc5"/>
+<ellipse cx="110" cy="137" rx="76" ry="66" fill="url(#fur)"/>
+<ellipse cx="74" cy="139" rx="21" ry="26" fill="#3f3335"/><ellipse cx="146" cy="139" rx="21" ry="26" fill="#3f3335"/>
+<ellipse cx="76" cy="146" rx="14" ry="14" fill="#765a46"/><ellipse cx="144" cy="146" rx="14" ry="14" fill="#765a46"/>
+<ellipse cx="68" cy="129" rx="8" ry="10" fill="white"/><ellipse cx="140" cy="129" rx="8" ry="10" fill="white"/><circle cx="83" cy="150" r="4" fill="white"/><circle cx="155" cy="150" r="4" fill="white"/>
+<ellipse cx="54" cy="164" rx="15" ry="8" fill="#efaeb9" opacity=".7"/><ellipse cx="166" cy="164" rx="15" ry="8" fill="#efaeb9" opacity=".7"/>
+<path d="M102 163 Q110 157 118 163 Q118 169 110 173 Q102 169 102 163" fill="#d48c99"/>
+<path d="M110 173 Q100 185 93 175 M110 173 Q120 185 127 175" fill="none" stroke="#967365" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="81" cy="219" rx="25" ry="13" fill="#f8f2e8"/><ellipse cx="140" cy="219" rx="25" ry="13" fill="#f8f2e8"/>
+<path d="M105 194 Q111 202 117 194" fill="none" stroke="#d5bda9" stroke-width="3" stroke-linecap="round"/>
+</svg></div><div class="ground"></div></div><h2 id="pet-title">Lumi</h2><p id="pet-message">Ich bin bereit für unser Abenteuer!</p><div class="stats"><div><strong id="coins">0</strong><span>✦ Sterne</span></div><div><strong id="total">0</strong><span>Wörter gelernt</span></div></div><button id="feed" class="secondary">🍎 Lumi füttern <span>20 ✦</span></button><p id="feed-status" class="small" role="status">Sammle Sterne mit richtigen Antworten.</p></aside>
 </div>
 <section class="how"><div><span>01</span><p><strong>Ein Wort entdecken</strong>Wähle die richtige Übersetzung.</p></div><div><span>02</span><p><strong>Sterne sammeln</strong>Jede richtige Antwort bringt 10 Sterne.</p></div><div><span>03</span><p><strong>Zusammen wachsen</strong>Füttere Lumi und erreiche neue Level.</p></div></section>
-</main><footer><span>Mit Neugier wächst alles. ✧</span><button id="reset">Fortschritt zurücksetzen</button></footer>
+<section class="card vocabulary-card" aria-labelledby="vocabulary-title">
+<div class="card-top"><div><span class="eyebrow">DEINE WÖRTER, DEIN ABENTEUER</span><h2 id="vocabulary-title">Meine Vokabeln</h2></div><span id="vocabulary-count" class="badge">0 Wörter</span></div>
+<p>Trage hier die Wörter ein, die du gerade lernen möchtest – in jeder Sprache. Deine Liste bleibt in diesem Browser gespeichert und wird nicht hochgeladen.</p>
+<form id="vocabulary-form" class="vocabulary-form"><label>Vokabel<input id="word-input" required maxlength="120" placeholder="z. B. rabbit" autocomplete="off"></label><label>Übersetzung<input id="translation-input" required maxlength="120" placeholder="z. B. Hase" autocomplete="off"></label><button class="primary" id="save-word" type="submit">Hinzufügen +</button><button id="cancel-edit" class="secondary" type="button" hidden>Abbrechen</button></form>
+<p id="vocabulary-status" role="status" aria-live="polite" class="small"></p>
+<div id="vocabulary-list" class="vocabulary-list"></div>
+<div class="vocabulary-actions"><button id="play-custom" class="primary" type="button">Meine Vokabeln spielen →</button><button id="export-words" class="secondary" type="button">Liste sichern ↓</button><label class="import-button secondary">Liste laden ↑<input id="import-words" type="file" accept="application/json,.json"></label></div>
+<p class="small">Zum Spielen brauchst du mindestens zwei unterschiedliche Übersetzungen. Änderungen an deiner Liste starten eine laufende eigene Runde neu. Mit „Liste sichern“ kannst du eine Kopie für ein anderes Gerät speichern.</p>
+</section></main><footer><span>Mit Neugier wächst alles. ✧</span><button id="reset">Fortschritt zurücksetzen</button></footer>
 </body></html>
